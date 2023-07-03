@@ -1,5 +1,0 @@
-const ContactList = ( {workout }) => {
-    return (
-        
-    )
-}

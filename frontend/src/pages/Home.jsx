@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import {Box, VStack, Heading} from "@chakra-ui/react"
 
 // components
 import ContactList from '../components/ContactList'
@@ -20,13 +21,13 @@ const Home = () => {
     }, [])
 
     return (
-        <div className="home">
-            <div className="contacts">
+        <Box className="home" pt="100px" ml="50px">
+            <Box className="contacts">
                 {contacts && contacts.map((contact) => (
                     <ContactList key={contact._id} contact={contact}/>
                 ))}
-            </div>
-        </div>
+            </Box>
+        </Box>
     )
 }
 
