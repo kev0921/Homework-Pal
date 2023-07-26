@@ -3,11 +3,14 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 
 import { ChakraProvider } from '@chakra-ui/react'
+import { ContactsContextProvider } from './context/ContactContext'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <ChakraProvider>
-      <App />
+      <ContactsContextProvider>
+        <App />
+      </ContactsContextProvider>
     </ChakraProvider>
   </React.StrictMode>,
 )

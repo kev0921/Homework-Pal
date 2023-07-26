@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react'
-import {Box, VStack, Heading} from "@chakra-ui/react"
+import { useEffect } from 'react'
+import {Box, VStack, Heading, Flex} from "@chakra-ui/react"
+import { useContactsContext } from '../hooks/useContactsContext'
 
 // components
 import ContactList from '../components/ContactList'
+import ContactForm from '../components/ContactForm'
 
 const Home = () => {
-    const [contacts, setContacts] = useState(null)
+    const {contacts, dispatch} = useContactsContext()
 
     useEffect(() => {
         const fetchContacts = async () => {
@@ -13,20 +15,27 @@ const Home = () => {
             const json = await response.json()
 
             if (response.ok){
-                setContacts(json)
+                dispatch({type: 'SET_CONTACTS', payload: json})
             }
         }
 
         fetchContacts()
     }, [])
-
+ 
     return (
-        <Box className="home" pt="100px" ml="50px">
+
+        <Box className="home" pt="8%" ml="5%">
+
+            <Box>
+                <ContactForm/>
+            </Box>
+
             <Box className="contacts">
                 {contacts && contacts.map((contact) => (
                     <ContactList key={contact._id} contact={contact}/>
                 ))}
             </Box>
+            
         </Box>
     )
 }
