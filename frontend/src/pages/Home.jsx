@@ -20,7 +20,7 @@ const Home = () => {
         }
 
         fetchContacts()
-    }, [])
+    }, [dispatch])
  
     return (
 

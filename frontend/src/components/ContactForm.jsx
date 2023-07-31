@@ -41,6 +41,7 @@ const ContactForm = () => {
       setEmail("");
       setError(null);
       setEmptyFields([]);
+      setFormSubmitted(false);
       console.log("new contact added", json);
       dispatch({ type: "CREATE_CONTACT", payload: json });
     }
