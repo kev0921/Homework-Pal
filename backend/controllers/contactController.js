@@ -30,7 +30,19 @@ const getContact = async (req, res) => {
 // create new contact
 const createContact = async (req, res) => {    
     const {name, number, email} = req.body
-    
+
+    let emptyFields = []
+
+    if (!name) {
+        emptyFields.push('name')
+    }
+    if (!number) {
+        emptyFields.push('number')
+    }
+    if (emptyFields.length > 0) {
+        return res.status(400).json({ error: 'Please fill in the required fields', emptyFields })
+    }
+
     // add doc to db
     try{
         const contact = await Contact.create({name, number, email})

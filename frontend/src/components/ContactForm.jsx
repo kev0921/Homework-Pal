@@ -1,70 +1,89 @@
-import { useState } from "react"
-import { useContactsContext } from '../hooks/useContactsContext'
-import {FormControl, FormLabel, Box, Input, Button, VStack, SimpleGrid, Card, CardHeader, CardBody, CardFooter, Text, Flex, Image, HStack, Heading } from "@chakra-ui/react";
-
+import { useState } from "react";
+import { useContactsContext } from "../hooks/useContactsContext";
+import { FormControl, FormLabel, FormErrorMessage, FormHelperText, Box, Input, Button, VStack, SimpleGrid, Card, CardHeader, CardBody, CardFooter, Text, Flex, Image, HStack, Heading } from "@chakra-ui/react";
 
 const ContactForm = () => {
-    const { dispatch } = useContactsContext()
-    const [name, setName] = useState('')
-    const [number, setNumber] = useState('')
-    const [email, setEmail] = useState('')
-    const [error, setError] = useState(null)
+  const { dispatch } = useContactsContext();
+  const [name, setName] = useState("");
+  const [number, setNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState(null);
+  const [emptyFields, setEmptyFields] = useState([]);
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
+  const isError1 = name === "" && formSubmitted;
+  const isError2 = number === "" && formSubmitted;
 
-        const contact = {name, number, email}
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setFormSubmitted(true);
 
-        const response = await fetch('/api/contacts', {
-            method: 'POST',
-            body: JSON.stringify(contact),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        const json = await response.json()
+    const contact = { name, number, email };
 
-        if(!response.ok) {
-            setError(json.error)
-        }
-        if (response.ok) {
-            setName('')
-            setNumber('')
-            setEmail('')
-            setError(null)
-            console.log('new contact added', json)
-            dispatch({type: 'CREATE_CONTACT', payload: json})
-        }
+    const response = await fetch("/api/contacts", {
+      method: "POST",
+      body: JSON.stringify(contact),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const json = await response.json();
+
+    if (!response.ok) {
+      setError(json.error);
+      setEmptyFields(json.emptyFields);
     }
 
-    return(
-        <Box>
-            <form className="create" onSubmit={handleSubmit}>
-                
-                <Heading>Add a new contact</Heading>
+    if (response.ok) {
+      setName("");
+      setNumber("");
+      setEmail("");
+      setError(null);
+      setEmptyFields([]);
+      console.log("new contact added", json);
+      dispatch({ type: "CREATE_CONTACT", payload: json });
+    }
+  };
 
-                <FormControl id="name">
-                    <FormLabel>Contact Name</FormLabel>
-                    <Input type="text" value={name} onChange={(e) => setName(e.target.value)}></Input>
-                </FormControl>
+  return (
+    <Box>
+      <form className="create" onSubmit={handleSubmit}>
+        <Heading>Add a new contact</Heading>
 
-                <FormControl id="number">
-                    <FormLabel>Contact Number</FormLabel>
-                    <Input type="text" value={number} onChange={(e) => setNumber(e.target.value)}></Input>
-                </FormControl>
+        <FormControl id="name" isInvalid={isError1}>
+          <FormLabel>Contact Name</FormLabel>
+          <Input type="text" value={name} onChange={(e) => setName(e.target.value)} />
 
-                <FormControl id="email">
-                    <FormLabel>Contact Email</FormLabel>
-                    <Input type="text" value={email} onChange={(e) => setEmail(e.target.value)}></Input>
-                </FormControl>
+          {!isError1 ? (
+            <FormHelperText>Enter the contact's full name</FormHelperText>
+          ) : (
+            <FormErrorMessage>Name is required.</FormErrorMessage>
+          )}
+        </FormControl>
 
-                <Button type="submit">Add Contact</Button>
+        <FormControl id="number" isInvalid={isError2}>
+          <FormLabel>Contact Number</FormLabel>
+          <Input type="text" value={number} onChange={(e) => setNumber(e.target.value)} />
 
-                {error && <Box className="error">{error}</Box>}
-            
-            </form> 
-        </Box>
-    )
-}
+          {!isError2 ? (
+            <FormHelperText>Enter the contact's phone number</FormHelperText>
+          ) : (
+            <FormErrorMessage>Number is required.</FormErrorMessage>
+          )}
+        </FormControl>
 
-export default ContactForm
+        <FormControl id="email">
+          <FormLabel>Contact Email</FormLabel>
+          <Input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
+        </FormControl>
+
+        <Button type="submit">Add Contact</Button>
+
+        {error && <Box className="error">{error}</Box>}
+      </form>
+    </Box>
+  );
+};
+
+export default ContactForm;
