@@ -1,43 +1,39 @@
-import { useEffect } from 'react'
-import {Box, VStack, Heading, Flex} from "@chakra-ui/react"
-import { useContactsContext } from '../hooks/useContactsContext'
-
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_1 = require("react");
+const react_2 = require("@chakra-ui/react");
+const useContactsContext_1 = require("../hooks/useContactsContext");
+const react_3 = __importDefault(require("react"));
 // components
-import ContactList from '../components/ContactList'
-import ContactForm from '../components/ContactForm'
-
+const ContactList_1 = __importDefault(require("../components/ContactList"));
+const ContactForm_1 = __importDefault(require("../components/ContactForm"));
 const Home = () => {
-    const {contacts, dispatch} = useContactsContext()
-
-    useEffect(() => {
-        const fetchContacts = async () => {
-            const response = await fetch('/api/contacts')
-            const json = await response.json()
-
-            if (response.ok){
-                dispatch({type: 'SET_CONTACTS', payload: json})
+    const { contacts, dispatch } = (0, useContactsContext_1.useContactsContext)();
+    (0, react_1.useEffect)(() => {
+        const fetchContacts = () => __awaiter(void 0, void 0, void 0, function* () {
+            const response = yield fetch('/api/contacts');
+            const json = yield response.json();
+            if (response.ok) {
+                dispatch({ type: 'SET_CONTACTS', payload: json });
             }
-        }
-
-        fetchContacts()
-    }, [dispatch])
- 
-    return (
-
-        <Box className="home" pt="8%" ml="5%">
-
-            <Box>
-                <ContactForm/>
-            </Box>
-
-            <Box className="contacts">
-                {contacts && contacts.map((contact) => (
-                    <ContactList key={contact._id} contact={contact}/>
-                ))}
-            </Box>
-            
-        </Box>
-    )
-}
-
-export default Home
+        });
+        fetchContacts();
+    }, [dispatch]);
+    return (react_3.default.createElement(react_2.Box, { className: "home", pt: "8%", ml: "5%" },
+        react_3.default.createElement(react_2.Box, null,
+            react_3.default.createElement(ContactForm_1.default, null)),
+        react_3.default.createElement(react_2.Box, { className: "contacts" }, contacts && contacts.map((contact) => (react_3.default.createElement(ContactList_1.default, { key: contact._id, contact: contact }))))));
+};
+exports.default = Home;

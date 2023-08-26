@@ -3,14 +3,15 @@ import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
 import { MoonIcon, SunIcon, HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import { Link, useLocation } from "react-router-dom";
 import { DiGithubBadge } from "react-icons/di";
-import { BsLinkedin } from "react-icons/bs"
+import { BsLinkedin } from "react-icons/bs";
+import React from "react";
 
 export default function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode();
   const location = useLocation();
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
 
-  const isActiveLink = (path) => {
+  const isActiveLink = (path: string) => {
     return location.pathname === path;
   };
 
@@ -31,9 +32,9 @@ export default function Navbar() {
     alignItems: 'center',
   }
 
-  const getLinkColor = (path) => {
+  const getLinkColor = (path: string) => {
     if (isActiveLink(path)) {
-      return colorMode === "dark" ? (isActiveLink ? "white" : "grey") : (isActiveLink ? "black" : "grey")
+      return colorMode === "dark" ? (isActiveLink(path) ? "white" : "grey") : (isActiveLink(path) ? "black" : "grey")
     }
     return colorMode === "dark" ? "grey" : "grey";
   };
@@ -88,7 +89,7 @@ export default function Navbar() {
 
           <Spacer />
 
-          <Flex align="center" spacing="100px">
+          <Flex align="center">
             <Box mx={8} fontSize="20px" color={getLinkColor("/")} transition="color 0.3s ease, font-weight 0.3s" 
               _hover={{ color: colorMode === "dark" ? "white" : "black", fontWeight: "bold"}} fontWeight={isActiveLink("/") ? "bold" : "normal"}>
               <a href="/">Contacts</a>
