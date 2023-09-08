@@ -23,17 +23,26 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express = __importStar(require("express"));
-const { createContact, getContacts, getContact, deleteContact, updateContact } = require('../controllers/contactController');
-const router = express.Router();
-// GET all contacts
-router.get('/', getContacts);
-// GET a single contact
-router.get('/:id', getContact);
-// POST a new contact
-router.post('/', createContact);
-// DELETE a contact
-router.delete('/:id', deleteContact);
-// UPDATE a contact
-router.patch('/:id', updateContact);
-module.exports = router;
+exports.ContactsContextProvider = exports.ContactsContext = void 0;
+const react_1 = __importStar(require("react"));
+// Create the context
+exports.ContactsContext = (0, react_1.createContext)(undefined);
+// Define the reducer function
+const contactsReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_CONTACTS':
+            return { contacts: action.payload };
+        case 'CREATE_CONTACT':
+            return { contacts: [action.payload, ...state.contacts] };
+        case 'DELETE_CONTACT':
+            return { contacts: state.contacts.filter(contact => contact._id !== action.payload._id) };
+        default:
+            return state;
+    }
+};
+// Define the context provider
+const ContactsContextProvider = ({ children }) => {
+    const [state, dispatch] = (0, react_1.useReducer)(contactsReducer, { contacts: [] });
+    return (react_1.default.createElement(exports.ContactsContext.Provider, { value: Object.assign(Object.assign({}, state), { dispatch }) }, children));
+};
+exports.ContactsContextProvider = ContactsContextProvider;

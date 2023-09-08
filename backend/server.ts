@@ -3,7 +3,8 @@ import 'dotenv/config';
 import { Request, Response } from 'express';
 import * as express from 'express';
 import mongoose from 'mongoose';
-const contectRoutes = require('./routes/contacts')
+const contactRoutes = require('./routes/contacts')
+const userRoutes = require('./routes/user')
 
 // express app
 const app = express.default()
@@ -17,7 +18,8 @@ app.use((req: Request, res: Response, next) => {
 })
 
 // routes
-app.use('/api/contacts', contectRoutes)
+app.use('/api/contacts', contactRoutes)
+app.use('/api/user', userRoutes)
 
 // Ensure that MONGO_URI environment variable is defined
 if (!process.env.MONGO_URI) {

@@ -24,16 +24,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = __importStar(require("express"));
-const { createContact, getContacts, getContact, deleteContact, updateContact } = require('../controllers/contactController');
+// controller functions
+const { signupUser, loginUser } = require('../controllers/userController');
 const router = express.Router();
-// GET all contacts
-router.get('/', getContacts);
-// GET a single contact
-router.get('/:id', getContact);
-// POST a new contact
-router.post('/', createContact);
-// DELETE a contact
-router.delete('/:id', deleteContact);
-// UPDATE a contact
-router.patch('/:id', updateContact);
+// login route
+router.post('/login', loginUser);
+// signup route
+router.post('/signup', signupUser);
 module.exports = router;
