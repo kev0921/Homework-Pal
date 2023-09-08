@@ -1,7 +1,7 @@
 import mongoose, { Document, Model } from 'mongoose';
+import bcrypt from 'bcrypt';
 
 const Schema = mongoose.Schema;
-const bcrypt
 
 export interface UserAttributes {
     email: string;
@@ -23,7 +23,7 @@ const userSchema = new Schema<UserAttributes>({
 })
 
 // static signup method
-userSchema.statics.signup = async (email: String, password: String) => {
+userSchema.statics.signup = async function(email: String, password: String) {
     
     const exists = await this.findOne({ email })
 
@@ -31,7 +31,12 @@ userSchema.statics.signup = async (email: String, password: String) => {
         throw Error('Email is already in use')
     }
 
+    const salt = await bcrypt.genSalt(10)
+    const hash = await bcrypt.hash(password, salt)
 
+    const user = await this.create({ email, password: hash })
+
+    return user
 }
 
 const User: Model<UserDocument> = mongoose.model<UserDocument>('User', userSchema);
