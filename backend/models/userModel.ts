@@ -1,6 +1,7 @@
 import mongoose, { Document, Model } from 'mongoose';
 
 const Schema = mongoose.Schema;
+const bcrypt
 
 export interface UserAttributes {
     email: string;
@@ -20,6 +21,18 @@ const userSchema = new Schema<UserAttributes>({
         required: true
     }
 })
+
+// static signup method
+userSchema.statics.signup = async (email: String, password: String) => {
+    
+    const exists = await this.findOne({ email })
+
+    if (exists) {
+        throw Error('Email is already in use')
+    }
+
+
+}
 
 const User: Model<UserDocument> = mongoose.model<UserDocument>('User', userSchema);
 
