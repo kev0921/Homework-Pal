@@ -24,7 +24,7 @@ const userSchema = new Schema<UserAttributes>({
 })
 
 // static signup method
-userSchema.statics.signup = async function(email: String, password: String) {
+userSchema.statics.signup = async function(email: string, password: string) {
 
     // validation
     if (!email || !password){

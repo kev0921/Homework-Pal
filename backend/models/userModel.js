@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const validator_1 = __importDefault(require("validator"));
 const Schema = mongoose_1.default.Schema;
 const userSchema = new Schema({
     email: {
@@ -29,6 +30,16 @@ const userSchema = new Schema({
 // static signup method
 userSchema.statics.signup = function (email, password) {
     return __awaiter(this, void 0, void 0, function* () {
+        // validation
+        if (!email || !password) {
+            throw Error('All fields must be filled');
+        }
+        if (!validator_1.default.isEmail(email)) {
+            throw Error('Email is not valid');
+        }
+        if (!validator_1.default.isStrongPassword(password)) {
+            throw Error('Password is not strong enough');
+        }
         const exists = yield this.findOne({ email });
         if (exists) {
             throw Error('Email is already in use');
