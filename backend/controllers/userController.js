@@ -13,16 +13,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const userModel_1 = __importDefault(require("../models/userModel"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const createToken = (_id) => {
+    return jsonwebtoken_1.default.sign({ _id }, process.env.SECRET, { expiresIn: '3d' });
+};
 // login user
 const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.json({ messg: 'login user' });
+    const { email, password } = req.body;
+    try {
+        const user = yield userModel_1.default.login(email, password);
+        // create a token
+        const token = createToken(user._id);
+        res.status(200).json({ email, token });
+    }
+    catch (error) {
+        res.status(400).json({ error: error.message });
+    }
 });
 // signup user
 const signupUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     try {
         const user = yield userModel_1.default.signup(email, password);
-        res.status(200).json({ email, user });
+        // create a token
+        const token = createToken(user._id);
+        res.status(200).json({ email, token });
     }
     catch (error) {
         res.status(400).json({ error: error.message });

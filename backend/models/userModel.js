@@ -50,5 +50,22 @@ userSchema.statics.signup = function (email, password) {
         return user;
     });
 };
+// static login method
+userSchema.statics.login = function name(email, password) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!email || !password) {
+            throw Error('All fields must be filled');
+        }
+        const user = yield this.findOne({ email });
+        if (!user) {
+            throw Error('Incorrect email');
+        }
+        const match = yield bcrypt_1.default.compare(password, user.password);
+        if (!match) {
+            throw Error('Incorrect password');
+        }
+        return user;
+    });
+};
 const User = mongoose_1.default.model('User', userSchema);
 exports.default = User;

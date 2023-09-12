@@ -4,13 +4,16 @@ import App from './App';
 
 import { ChakraProvider } from '@chakra-ui/react'
 import { ContactsContextProvider } from './context/ContactContext'
+import { AuthContextProvider } from './context/AuthContext'
 
 ReactDOM.render(
   <React.StrictMode>
     <ChakraProvider>
-      <ContactsContextProvider>
-        <App />
-      </ContactsContextProvider>
+      <AuthContextProvider>
+        <ContactsContextProvider>
+          <App />
+        </ContactsContextProvider>
+      </AuthContextProvider>
     </ChakraProvider>
   </React.StrictMode>,
   document.getElementById('root')
