@@ -99,6 +99,16 @@ export default function Navbar() {
               _hover={{ color: colorMode === "dark" ? "white" : "black", fontWeight: "bold"}} fontWeight={isActiveLink("/About") ? "bold" : "normal"}>
               <a href="/About">Add</a>
             </Box>
+
+            <Box mx={8} fontSize="20px" color={getLinkColor("/login")} transition="color 0.3s ease, font-weight 0.3s" 
+              _hover={{ color: colorMode === "dark" ? "white" : "black", fontWeight: "bold"}} fontWeight={isActiveLink("/About") ? "bold" : "normal"}>
+              <a href="/login">Login</a>
+            </Box>
+
+            <Box mx={8} fontSize="20px" color={getLinkColor("/login")} transition="color 0.3s ease, font-weight 0.3s" 
+              _hover={{ color: colorMode === "dark" ? "white" : "black", fontWeight: "bold"}} fontWeight={isActiveLink("/About") ? "bold" : "normal"}>
+              <a href="/signup">Signup</a>
+            </Box>
           </Flex>
 
           <Spacer />
