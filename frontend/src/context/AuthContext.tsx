@@ -2,9 +2,9 @@ import React, { createContext, useReducer, ReactNode, Dispatch } from 'react';
 
 // Define the actions and state types
 type AuthAction =
-  | { type: 'SET_CONTACTS'; payload: any[] }
-  | { type: 'CREATE_CONTACT'; payload: any }
-  | { type: 'DELETE_CONTACT'; payload: { _id: any } };
+  | { type: any; payload: any[] }
+  | { type: any; payload: any }
+  | { type: any; payload: { _id: any } };
 
 type AuthState = {
   user: any[];

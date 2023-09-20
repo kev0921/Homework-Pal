@@ -1,18 +1,14 @@
-import mongoose, { Document, Model } from 'mongoose';
-import bcrypt from 'bcrypt';
-import validator from 'validator'
+import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 
-const Schema = mongoose.Schema;
+// Import for password validation
+// import validator from "validator";
 
-export interface UserAttributes {
-    email: string;
-    password: string;
-}
+const Schema = mongoose.Schema
 
-export interface UserDocument extends UserAttributes, Document {}
-
-const userSchema = new Schema<UserAttributes>({
-    email: {
+// Define the attributes that each user will have
+const userSchema = new Schema({
+    username: {
         type: String,
         required: true,
         unique: true
@@ -20,60 +16,58 @@ const userSchema = new Schema<UserAttributes>({
     password: {
         type: String,
         required: true
-    }
+    },
+    friends: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    }],
 })
 
-// static signup method
-userSchema.statics.signup = async function(email: string, password: string) {
+// Static sign up method (used by MongoDB)
+userSchema.statics.signup = async function (username: string, password: string) {
+    const exists = await this.findOne({ username })
 
-    // validation
-    if (!email || !password){
-        throw Error('All fields must be filled')
+    if (!username || !password) {
+        const missingField = !username ? "username" : "password";
+        throw Error("A " + missingField + " is required!")
     }
-    if(!validator.isEmail(email)) {
-        throw Error('Email is not valid')
-    }
-    if(!validator.isStrongPassword(password)) {
-        throw Error('Password is not strong enough')
-    }
-    
-    const exists = await this.findOne({ email })
+
+    // Validate password strength
+    // if (!validator.isStrongPassword(password)) {
+    //     throw Error('Password not strong enough.')
+    // }
 
     if (exists) {
-        throw Error('Email is already in use')
+        throw Error("Username already exists.")
+    } else {
+        const salt = await bcrypt.genSalt(10)
+        const hash = await bcrypt.hash(password, salt)
+        const user = await this.create({ username, password: hash})
+        
+        return user
     }
-
-    const salt = await bcrypt.genSalt(10)
-    const hash = await bcrypt.hash(password, salt)
-
-    const user = await this.create({ email, password: hash })
-
-    return user
 }
 
-// static login method
-userSchema.statics.login = async function name(email:String, password:String) {
-    
-    if (!email || !password){
-        throw Error('All fields must be filled')
+// Static login method (used by MongoDB)
+userSchema.statics.login = async function (username: string, password: string) {
+    if (!username || !password) {
+        const missingField = !username ? "username" : "password";
+        throw Error("A " + missingField + " is required!")
     }
 
-    const user = await this.findOne({email})
-
-    if(!user) {
-        throw Error('Incorrect email')
+    const user = await this.findOne({ username })
+    if (!user) {
+        throw Error("Username not found.")
     }
-    
+
+    // Try to match password with the one in the database
     const match = await bcrypt.compare(password, user.password)
 
-    if (!match) {
-        throw Error('Incorrect password')
+    if (match) {
+        return user
+    } else {
+        throw Error('Incorrect password!')
     }
-
-    return user
-    
 }
 
-const User: Model<UserDocument> = mongoose.model<UserDocument>('User', userSchema);
-
-export default User;
+module.exports = mongoose.model('User', userSchema)
