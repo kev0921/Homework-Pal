@@ -13,14 +13,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = require("react");
+const useLogin_1 = require("../hooks/useLogin");
 const react_2 = require("@chakra-ui/react");
 const react_3 = __importDefault(require("react"));
 const Login = () => {
     const [email, setEmail] = (0, react_1.useState)('');
     const [password, setPassword] = (0, react_1.useState)('');
+    const { login, error, isLoading } = (0, useLogin_1.useLogin)();
     const handleSubmit = (e) => __awaiter(void 0, void 0, void 0, function* () {
         e.preventDefault();
-        console.log(email, password);
+        yield login(email, password);
     });
     return (react_3.default.createElement(react_2.Box, { p: "100px" },
         react_3.default.createElement("form", { className: "login", onSubmit: handleSubmit },
@@ -31,6 +33,7 @@ const Login = () => {
             react_3.default.createElement(react_2.FormControl, { id: "password" },
                 react_3.default.createElement(react_2.FormLabel, null, "Password:"),
                 react_3.default.createElement(react_2.Input, { type: "password", value: password, onChange: (e) => setPassword(e.target.value) })),
-            react_3.default.createElement(react_2.Button, { type: "submit" }, "Log in"))));
+            react_3.default.createElement(react_2.Button, { disabled: isLoading, type: "submit" }, "Log in"),
+            error && react_3.default.createElement("div", null, error))));
 };
 exports.default = Login;

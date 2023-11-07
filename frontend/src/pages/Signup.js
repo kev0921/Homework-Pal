@@ -34,6 +34,6 @@ const Signup = () => {
                 react_3.default.createElement(react_2.FormLabel, null, "Password:"),
                 react_3.default.createElement(react_2.Input, { type: "password", value: password, onChange: (e) => setPassword(e.target.value) })),
             react_3.default.createElement(react_2.Button, { disabled: isLoading, type: "submit" }, "Sign up"),
-            error && react_3.default.createElement("div", { className: "error" }, error))));
+            error && react_3.default.createElement("div", null, error))));
 };
 exports.default = Signup;

@@ -5,6 +5,7 @@ import { Link, useLocation } from "react-router-dom";
 import { DiGithubBadge } from "react-icons/di";
 import { BsLinkedin } from "react-icons/bs";
 import React from "react";
+import { useLogout } from "../hooks/useLogout";
 
 export default function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -39,6 +40,12 @@ export default function Navbar() {
     return colorMode === "dark" ? "grey" : "grey";
   };
 
+  const { logout } = useLogout();
+
+  const handleClick = () => {
+    logout()
+  }
+
   return (
     <Flex sx={navStyles} alignItems="center">
       {/* Mobile Navbar */}
@@ -71,6 +78,11 @@ export default function Navbar() {
               </MenuItem>
               <MenuItem as="a" href="/Contact">
                 Contact
+              </MenuItem>
+              <MenuItem>
+                <Button onClick={handleClick}>
+                  Logout
+                </Button>
               </MenuItem>
             </MenuList>
           </Menu>
@@ -118,17 +130,10 @@ export default function Navbar() {
               {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
             </Button>
 
-            <Box display="flex" alignItems="center" mr="20px">
-              <a href="https://www.linkedin.com/in/kevinhu04/" style={iconStyles}>
-                <Icon as={BsLinkedin} boxSize={6} mr={5} color='blue.500' transition="color 0.3s ease" _hover={{ color: colorMode === "dark" ? "white" : "black" }}/>
-              </a>
-              <a href="https://github.com/kev0921" style={iconStyles}>
-                <Icon as={DiGithubBadge} boxSize={10} mr={5} color='blue.500' transition="color 0.3s ease" _hover={{ color: colorMode === "dark" ? "white" : "black" }} />
-              </a>
-              <a href="https://www.instagram.com/kevinhu04/" style={iconStyles}>
-                <Icon as={FaInstagram} boxSize={7} color='blue.500' transition="color 0.3s ease" _hover={{ color: colorMode === "dark" ? "white" : "black" }}/>
-              </a>
-            </Box>
+            <Button onClick={handleClick}>
+              Logout
+            </Button>
+
           </HStack>     
         </>
       )}
