@@ -6,6 +6,7 @@ import { DiGithubBadge } from "react-icons/di";
 import { BsLinkedin } from "react-icons/bs";
 import React from "react";
 import { useLogout } from "../hooks/useLogout";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 export default function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -41,6 +42,7 @@ export default function Navbar() {
   };
 
   const { logout } = useLogout();
+  const { user } = useAuthContext();
 
   const handleClick = () => {
     logout()
@@ -112,15 +114,29 @@ export default function Navbar() {
               <a href="/About">Add</a>
             </Box>
 
-            <Box mx={8} fontSize="20px" color={getLinkColor("/login")} transition="color 0.3s ease, font-weight 0.3s" 
-              _hover={{ color: colorMode === "dark" ? "white" : "black", fontWeight: "bold"}} fontWeight={isActiveLink("/About") ? "bold" : "normal"}>
-              <a href="/login">Login</a>
+            { user && (
+            <Box>
+              <Box>{user.email}</Box>
+              <Button onClick={handleClick}>
+              Logout
+              </Button>
             </Box>
+            )}
 
-            <Box mx={8} fontSize="20px" color={getLinkColor("/login")} transition="color 0.3s ease, font-weight 0.3s" 
-              _hover={{ color: colorMode === "dark" ? "white" : "black", fontWeight: "bold"}} fontWeight={isActiveLink("/About") ? "bold" : "normal"}>
-              <a href="/signup">Signup</a>
+            {!user && (
+            <Box>
+              <Box mx={8} fontSize="20px" color={getLinkColor("/login")} transition="color 0.3s ease, font-weight 0.3s" 
+                _hover={{ color: colorMode === "dark" ? "white" : "black", fontWeight: "bold"}} fontWeight={isActiveLink("/About") ? "bold" : "normal"}>
+                <a href="/login">Login</a>
+              </Box>
+
+              <Box mx={8} fontSize="20px" color={getLinkColor("/login")} transition="color 0.3s ease, font-weight 0.3s" 
+                _hover={{ color: colorMode === "dark" ? "white" : "black", fontWeight: "bold"}} fontWeight={isActiveLink("/About") ? "bold" : "normal"}>
+                <a href="/signup">Signup</a>
+              </Box>
             </Box>
+            )}
+
           </Flex>
 
           <Spacer />
@@ -128,10 +144,6 @@ export default function Navbar() {
           <HStack alignItems="center">
             <Button variant="ghost" onClick={toggleColorMode} mr="50px" transition="background-color 0.3s ease" _hover={{ bg: colorMode === 'dark' ? 'gray.800' : 'gray.200' }}>
               {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
-            </Button>
-
-            <Button onClick={handleClick}>
-              Logout
             </Button>
 
           </HStack>     

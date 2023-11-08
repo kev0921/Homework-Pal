@@ -8,6 +8,7 @@ const icons_1 = require("@chakra-ui/icons");
 const react_router_dom_1 = require("react-router-dom");
 const react_2 = __importDefault(require("react"));
 const useLogout_1 = require("../hooks/useLogout");
+const useAuthContext_1 = require("../hooks/useAuthContext");
 function Navbar() {
     const { colorMode, toggleColorMode } = (0, react_1.useColorMode)();
     const location = (0, react_router_dom_1.useLocation)();
@@ -37,6 +38,7 @@ function Navbar() {
         return colorMode === "dark" ? "grey" : "grey";
     };
     const { logout } = (0, useLogout_1.useLogout)();
+    const { user } = (0, useAuthContext_1.useAuthContext)();
     const handleClick = () => {
         logout();
     };
@@ -64,13 +66,16 @@ function Navbar() {
                     react_2.default.createElement("a", { href: "/" }, "Contacts")),
                 react_2.default.createElement(react_1.Box, { mx: 8, fontSize: "20px", color: getLinkColor("/About"), transition: "color 0.3s ease, font-weight 0.3s", _hover: { color: colorMode === "dark" ? "white" : "black", fontWeight: "bold" }, fontWeight: isActiveLink("/About") ? "bold" : "normal" },
                     react_2.default.createElement("a", { href: "/About" }, "Add")),
-                react_2.default.createElement(react_1.Box, { mx: 8, fontSize: "20px", color: getLinkColor("/login"), transition: "color 0.3s ease, font-weight 0.3s", _hover: { color: colorMode === "dark" ? "white" : "black", fontWeight: "bold" }, fontWeight: isActiveLink("/About") ? "bold" : "normal" },
-                    react_2.default.createElement("a", { href: "/login" }, "Login")),
-                react_2.default.createElement(react_1.Box, { mx: 8, fontSize: "20px", color: getLinkColor("/login"), transition: "color 0.3s ease, font-weight 0.3s", _hover: { color: colorMode === "dark" ? "white" : "black", fontWeight: "bold" }, fontWeight: isActiveLink("/About") ? "bold" : "normal" },
-                    react_2.default.createElement("a", { href: "/signup" }, "Signup"))),
+                user && (react_2.default.createElement(react_1.Box, null,
+                    react_2.default.createElement(react_1.Box, null, user.email),
+                    react_2.default.createElement(react_1.Button, { onClick: handleClick }, "Logout"))),
+                !user && (react_2.default.createElement(react_1.Box, null,
+                    react_2.default.createElement(react_1.Box, { mx: 8, fontSize: "20px", color: getLinkColor("/login"), transition: "color 0.3s ease, font-weight 0.3s", _hover: { color: colorMode === "dark" ? "white" : "black", fontWeight: "bold" }, fontWeight: isActiveLink("/About") ? "bold" : "normal" },
+                        react_2.default.createElement("a", { href: "/login" }, "Login")),
+                    react_2.default.createElement(react_1.Box, { mx: 8, fontSize: "20px", color: getLinkColor("/login"), transition: "color 0.3s ease, font-weight 0.3s", _hover: { color: colorMode === "dark" ? "white" : "black", fontWeight: "bold" }, fontWeight: isActiveLink("/About") ? "bold" : "normal" },
+                        react_2.default.createElement("a", { href: "/signup" }, "Signup"))))),
             react_2.default.createElement(react_1.Spacer, null),
             react_2.default.createElement(react_1.HStack, { alignItems: "center" },
-                react_2.default.createElement(react_1.Button, { variant: "ghost", onClick: toggleColorMode, mr: "50px", transition: "background-color 0.3s ease", _hover: { bg: colorMode === 'dark' ? 'gray.800' : 'gray.200' } }, colorMode === 'light' ? react_2.default.createElement(icons_1.MoonIcon, null) : react_2.default.createElement(icons_1.SunIcon, null)),
-                react_2.default.createElement(react_1.Button, { onClick: handleClick }, "Logout"))))));
+                react_2.default.createElement(react_1.Button, { variant: "ghost", onClick: toggleColorMode, mr: "50px", transition: "background-color 0.3s ease", _hover: { bg: colorMode === 'dark' ? 'gray.800' : 'gray.200' } }, colorMode === 'light' ? react_2.default.createElement(icons_1.MoonIcon, null) : react_2.default.createElement(icons_1.SunIcon, null)))))));
 }
 exports.default = Navbar;
