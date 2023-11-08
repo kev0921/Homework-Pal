@@ -40,6 +40,15 @@ const authReducer = (state, action) => {
 exports.authReducer = authReducer;
 const AuthContextProvider = ({ children }) => {
     const [state, dispatch] = (0, react_1.useReducer)(exports.authReducer, { user: null });
+    (0, react_1.useEffect)(() => {
+        const userJSON = localStorage.getItem('user');
+        if (userJSON) {
+            const user = JSON.parse(userJSON);
+            if (user) {
+                dispatch({ type: 'LOGIN', payload: user });
+            }
+        }
+    }, []);
     console.log('AuthContext state: ', state);
     return (react_1.default.createElement(exports.AuthContext.Provider, { value: Object.assign(Object.assign({}, state), { dispatch }) }, children));
 };
