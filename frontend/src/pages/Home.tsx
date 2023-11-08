@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import {Box, VStack, Heading, Flex} from "@chakra-ui/react"
 import { useContactsContext } from '../hooks/useContactsContext'
+import { useAuthContext } from '../hooks/useAuthContext'
 import React from 'react'
 
 // components
@@ -9,10 +10,15 @@ import ContactForm from '../components/ContactForm'
 
 const Home = () => {
     const {contacts, dispatch} = useContactsContext()
+    const {user} = useAuthContext()
 
     useEffect(() => {
         const fetchContacts = async () => {
-            const response = await fetch('/api/contacts')
+            const response = await fetch('/api/contacts', {
+                headers: {
+                    'Authorization': `Bearer ${user.token}`
+                }
+            })
             const json = await response.json()
 
             if (response.ok){
@@ -20,8 +26,12 @@ const Home = () => {
             }
         }
 
+        if (user) {
+            fetchContacts()
+        }
+
         fetchContacts()
-    }, [dispatch])
+    }, [dispatch, user])
  
     return (
 

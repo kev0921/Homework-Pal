@@ -15,11 +15,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = require("@chakra-ui/react");
 const useContactsContext_1 = require("../hooks/useContactsContext");
 const react_2 = __importDefault(require("react"));
+const useAuthContext_1 = require("../hooks/useAuthContext");
 const ContactList = ({ contact }) => {
     const { dispatch } = (0, useContactsContext_1.useContactsContext)();
+    const { user } = (0, useAuthContext_1.useAuthContext)();
     const handleClick = () => __awaiter(void 0, void 0, void 0, function* () {
+        if (!user) {
+            return;
+        }
         const response = yield fetch('/api/contacts/' + contact._id, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${user.token}`
+            }
         });
         const json = yield response.json();
         if (response.ok) {

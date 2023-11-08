@@ -1,6 +1,7 @@
 import { Box, VStack, SimpleGrid, Card, CardHeader, CardBody, CardFooter, Text, Flex, Image, HStack, Heading, Button, Spacer } from "@chakra-ui/react";
 import { useContactsContext } from "../hooks/useContactsContext";
 import React from "react";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 interface Contact {
     _id: string;
@@ -16,10 +17,17 @@ interface ContactListProps {
 const ContactList: React.FC<ContactListProps> = ({ contact }) => {
 
     const { dispatch } = useContactsContext()
+    const { user } = useAuthContext()
 
     const handleClick = async () => {
+        if (!user) {
+            return
+        }
         const response = await fetch('/api/contacts/' + contact._id, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${user.token}`
+            }
         })
         const json = await response.json()
 

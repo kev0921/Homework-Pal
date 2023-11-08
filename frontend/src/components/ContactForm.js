@@ -14,14 +14,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = require("react");
 const useContactsContext_1 = require("../hooks/useContactsContext");
+const useAuthContext_1 = require("../hooks/useAuthContext");
 const react_2 = require("@chakra-ui/react");
 const react_3 = __importDefault(require("react"));
 const ContactForm = () => {
     const { dispatch } = (0, useContactsContext_1.useContactsContext)();
+    const { user } = (0, useAuthContext_1.useAuthContext)();
     const [name, setName] = (0, react_1.useState)("");
     const [number, setNumber] = (0, react_1.useState)("");
     const [email, setEmail] = (0, react_1.useState)("");
-    const [error, setError] = (0, react_1.useState)(null);
+    const [error, setError] = (0, react_1.useState)('');
     const [emptyFields, setEmptyFields] = (0, react_1.useState)([]);
     const [formSubmitted, setFormSubmitted] = (0, react_1.useState)(false);
     const isError1 = name === "" && formSubmitted;
@@ -29,12 +31,17 @@ const ContactForm = () => {
     const handleSubmit = (e) => __awaiter(void 0, void 0, void 0, function* () {
         e.preventDefault();
         setFormSubmitted(true);
+        if (!user) {
+            setError('You must be logged in');
+            return;
+        }
         const contact = { name, number, email };
         const response = yield fetch("/api/contacts", {
             method: "POST",
             body: JSON.stringify(contact),
             headers: {
                 "Content-Type": "application/json",
+                'Authorization': `Bearer ${user.token}`
             },
         });
         const json = yield response.json();
@@ -46,7 +53,7 @@ const ContactForm = () => {
             setName("");
             setNumber("");
             setEmail("");
-            setError(null);
+            setError('');
             setEmptyFields([]);
             setFormSubmitted(false);
             console.log("new contact added", json);

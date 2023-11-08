@@ -1,14 +1,17 @@
 import { useState } from "react";
 import { useContactsContext } from "../hooks/useContactsContext";
+import { useAuthContext } from "../hooks/useAuthContext";
 import { FormControl, FormLabel, FormErrorMessage, FormHelperText, Box, Input, Button, VStack, SimpleGrid, Card, CardHeader, CardBody, CardFooter, Text, Flex, Image, HStack, Heading } from "@chakra-ui/react";
 import React from "react";
 
 const ContactForm = () => {
   const { dispatch } = useContactsContext();
+  const { user } = useAuthContext();
+
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
   const [email, setEmail] = useState("");
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string>('');
   const [emptyFields, setEmptyFields] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
 
@@ -19,6 +22,11 @@ const ContactForm = () => {
     e.preventDefault();
     setFormSubmitted(true);
 
+    if (!user) {
+      setError('You must be logged in')
+      return
+    }
+
     const contact = { name, number, email };
 
     const response = await fetch("/api/contacts", {
@@ -26,6 +34,7 @@ const ContactForm = () => {
       body: JSON.stringify(contact),
       headers: {
         "Content-Type": "application/json",
+        'Authorization': `Bearer ${user.token}`
       },
     });
 
@@ -40,7 +49,7 @@ const ContactForm = () => {
       setName("");
       setNumber("");
       setEmail("");
-      setError(null);
+      setError('');
       setEmptyFields([]);
       setFormSubmitted(false);
       console.log("new contact added", json);
