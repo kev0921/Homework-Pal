@@ -25,7 +25,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = __importStar(require("express"));
 const { createContact, getContacts, getContact, deleteContact, updateContact } = require('../controllers/contactController');
+// const requireAuth = require('../middleware/requireAuth')
 const router = express.Router();
+// Authentication Step: require auth for all contact routes
+// router.use(requireAuth)
 // GET all contacts
 router.get('/', getContacts);
 // GET a single contact

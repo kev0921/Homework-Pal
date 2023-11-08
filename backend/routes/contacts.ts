@@ -7,8 +7,12 @@ const {
     deleteContact,
     updateContact
 } = require('../controllers/contactController')
+// const requireAuth = require('../middleware/requireAuth')
 
 const router = express.Router()
+
+// Authentication Step: require auth for all contact routes
+// router.use(requireAuth)
 
 // GET all contacts
 router.get('/', getContacts)
