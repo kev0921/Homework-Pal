@@ -1,23 +1,29 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = __importDefault(require("mongoose"));
-const Schema = mongoose_1.default.Schema;
-const contactSchema = new Schema({
-    name: {
-        type: String,
-        required: true
+const mongoose = require('mongoose');
+
+const Schema = mongoose.Schema;
+
+const contactSchema = new Schema(
+    {
+        name: {
+            type: String,
+            required: true
+        },
+        number: {
+            type: String,
+            required: true
+        },
+        email: {
+            type: String,
+            required: false
+        },
+        user_id: {
+            type: String,
+            required: true
+        }
     },
-    number: {
-        type: String,
-        required: true
-    },
-    email: {
-        type: String,
-        required: false
-    }
-}, { timestamps: true });
-const Contact = mongoose_1.default.model('Contact', contactSchema);
-exports.default = Contact;
+    { timestamps: true }
+);
+
+const Contact = mongoose.model('Contact', contactSchema);
+
+module.exports = Contact;

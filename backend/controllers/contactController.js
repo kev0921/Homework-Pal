@@ -1,40 +1,39 @@
-"use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const contactModel_1 = __importDefault(require("../models/contactModel"));
-const mongoose_1 = __importDefault(require("mongoose"));
-//get all contacts
-const getContacts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const contacts = yield contactModel_1.default.find({}).sort({ createdAt: -1 });
+const { Request, Response } = require('express');
+const Contact = require('../models/contactModel');
+const mongoose = require('mongoose');
+
+// Get all contacts
+const getContacts = async (req, res) => {
+    const user_id = req.user._id;
+
+    const contacts = await Contact.find({ user_id }).sort({ createdAt: -1 });
+
     res.status(200).json(contacts);
-});
-//get a single contact
-const getContact = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+};
+
+// Get a single contact
+const getContact = async (req, res) => {
     const { id } = req.params;
-    if (!mongoose_1.default.Types.ObjectId.isValid(id)) {
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(404).json({ error: 'No such contact' });
     }
-    const contact = yield contactModel_1.default.findById(id);
+
+    const contact = await Contact.findById(id);
+
     if (!contact) {
         return res.status(404).json({ error: 'No such contact' });
     }
+
     res.status(200).json(contact);
-});
-// create new contact
-const createContact = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+};
+
+// Create a new contact
+const createContact = async (req, res) => {
     const { name, number, email } = req.body;
+
     let emptyFields = [];
+
     if (!name) {
         emptyFields.push('name');
     }
@@ -44,48 +43,59 @@ const createContact = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     if (emptyFields.length > 0) {
         return res.status(400).json({ error: 'Please fill in the required fields', emptyFields });
     }
-    // add doc to db
+
+    // Add a document to the database
     try {
-        const contact = yield contactModel_1.default.create({ name, number, email });
+        const user_id = req.user._id;
+        const contact = await Contact.create({ name, number, email, user_id });
         res.status(200).json(contact);
-    }
-    catch (error) {
+    } catch (error) {
         if (error instanceof Error) {
             res.status(400).json({ error: error.message });
-        }
-        else {
+        } else {
             res.status(500).json({ error: 'Server error' });
         }
     }
-});
-// delete a contact
-const deleteContact = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+};
+
+// Delete a contact
+const deleteContact = async (req, res) => {
     const { id } = req.params;
-    if (!mongoose_1.default.Types.ObjectId.isValid(id)) {
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(404).json({ error: 'No such contact' });
     }
-    const contact = yield contactModel_1.default.findOneAndDelete({ _id: id });
+
+    const contact = await Contact.findOneAndDelete({ _id: id });
+
     if (!contact) {
         return res.status(400).json({ error: 'No such contact' });
     }
+
     res.status(200).json(contact);
-});
-// update a contact
-const updateContact = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+};
+
+// Update a contact
+const updateContact = async (req, res) => {
     const { id } = req.params;
-    if (!mongoose_1.default.Types.ObjectId.isValid(id)) {
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(404).json({ error: 'No such contact' });
     }
-    const contact = yield contactModel_1.default.findOneAndUpdate({ _id: id }, Object.assign({}, req.body));
+
+    const contact = await Contact.findOneAndUpdate({ _id: id }, { ...req.body });
+
     if (!contact) {
         return res.status(400).json({ error: 'No such contact' });
     }
+
     res.status(200).json(contact);
-});
+};
+
 module.exports = {
     getContacts,
     getContact,
     createContact,
     deleteContact,
-    updateContact
+    updateContact,
 };
