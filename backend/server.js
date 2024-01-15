@@ -29,7 +29,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv/config");
 const express = __importStar(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
-const contactRoutes = require('./routes/contacts');
+const taskRoutes = require('./routes/tasks');
 const userRoutes = require('./routes/user');
 // express app
 const app = express.default();
@@ -40,7 +40,7 @@ app.use((req, res, next) => {
     next();
 });
 // routes
-app.use('/api/contacts', contactRoutes);
+app.use('/api/tasks', taskRoutes);
 app.use('/api/user', userRoutes);
 // Ensure that MONGO_URI environment variable is defined
 if (!process.env.MONGO_URI) {

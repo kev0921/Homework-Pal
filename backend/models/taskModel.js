@@ -2,21 +2,21 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const contactSchema = new Schema(
+const taskSchema = new Schema(
     {
         name: {
             type: String,
             required: true
         },
-        number: {
+        subject: {
             type: String,
             required: true
         },
-        email: {
+        description: {
             type: String,
             required: false
         },
-        user_id: {
+        task_id: {
             type: String,
             required: true
         }
@@ -24,6 +24,6 @@ const contactSchema = new Schema(
     { timestamps: true }
 );
 
-const Contact = mongoose.model('Contact', contactSchema);
+const Task = mongoose.model('Task', taskSchema);
 
-module.exports = Contact;
+module.exports = Task;

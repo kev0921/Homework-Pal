@@ -36,19 +36,25 @@ const ContactList: React.FC<ContactListProps> = ({ contact }) => {
         }
     }
 
+    const handleClickChat = () => {
+        
+    }
+
     return (
         <SimpleGrid p="20px">
-            <Card align="left" width="500px" borderRadius={20} boxShadow={"lg"} bg="gray.50" p="20px">
+                <Card align="left" width="500px" borderRadius={20} boxShadow={"lg"} bg="gray.50" p="20px">
 
-                <Flex alignItems="center" width="100%">
-                    <Heading color="blue.500">{contact.name}</Heading>
-                    <Spacer></Spacer>
-                    <Button onClick={handleClick}>Delete</Button>
-                </Flex>
-                <Text textAlign="left">{contact.number}</Text>
-                <Text textAlign="left">{contact.email}</Text>
+                    <Flex alignItems="center" width="100%">
+                        <Heading color="blue.500">{contact.name}</Heading>
+                        <Spacer></Spacer>
+                        <Button onClick={handleClick}>Delete</Button>
+                    </Flex>
+                    <Text textAlign="left">{contact.number}</Text>
+                    <Text textAlign="left">{contact.email}</Text>
 
-            </Card>
+                    <Button onClick={handleClickChat}>Chat</Button>
+
+                </Card>
         </SimpleGrid>
     );
 }
