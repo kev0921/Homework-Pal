@@ -23,26 +23,26 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ContactsContextProvider = exports.ContactsContext = void 0;
+exports.TasksContextProvider = exports.TasksContext = void 0;
 const react_1 = __importStar(require("react"));
 // Create the context
-exports.ContactsContext = (0, react_1.createContext)(undefined);
+exports.TasksContext = (0, react_1.createContext)(undefined);
 // Define the reducer function
-const contactsReducer = (state, action) => {
+const tasksReducer = (state, action) => {
     switch (action.type) {
-        case 'SET_CONTACTS':
-            return { contacts: action.payload };
-        case 'CREATE_CONTACT':
-            return { contacts: [action.payload, ...state.contacts] };
-        case 'DELETE_CONTACT':
-            return { contacts: state.contacts.filter(contact => contact._id !== action.payload._id) };
+        case 'SET_TASKS':
+            return { tasks: action.payload };
+        case 'CREATE_TASK':
+            return { tasks: [action.payload, ...state.tasks] };
+        case 'DELETE_TASK':
+            return { tasks: state.tasks.filter(task => task._id !== action.payload._id) };
         default:
             return state;
     }
 };
 // Define the context provider
-const ContactsContextProvider = ({ children }) => {
-    const [state, dispatch] = (0, react_1.useReducer)(contactsReducer, { contacts: [] });
-    return (react_1.default.createElement(exports.ContactsContext.Provider, { value: Object.assign(Object.assign({}, state), { dispatch }) }, children));
+const TasksContextProvider = ({ children }) => {
+    const [state, dispatch] = (0, react_1.useReducer)(tasksReducer, { tasks: [] });
+    return (react_1.default.createElement(exports.TasksContext.Provider, { value: Object.assign(Object.assign({}, state), { dispatch }) }, children));
 };
-exports.ContactsContextProvider = ContactsContextProvider;
+exports.TasksContextProvider = TasksContextProvider;

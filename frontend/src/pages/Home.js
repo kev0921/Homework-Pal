@@ -14,35 +14,35 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = require("react");
 const react_2 = require("@chakra-ui/react");
-const useContactsContext_1 = require("../hooks/useContactsContext");
+const useTasksContext_1 = require("../hooks/useTasksContext");
 const useAuthContext_1 = require("../hooks/useAuthContext");
 const react_3 = __importDefault(require("react"));
 // components
-const ContactList_1 = __importDefault(require("../components/ContactList"));
-const ContactForm_1 = __importDefault(require("../components/ContactForm"));
+const TaskList_1 = __importDefault(require("../components/TaskList"));
+const TaskForm_1 = __importDefault(require("../components/TaskForm"));
 const Home = () => {
-    const { contacts, dispatch } = (0, useContactsContext_1.useContactsContext)();
+    const { tasks, dispatch } = (0, useTasksContext_1.useTasksContext)();
     const { user } = (0, useAuthContext_1.useAuthContext)();
     (0, react_1.useEffect)(() => {
-        const fetchContacts = () => __awaiter(void 0, void 0, void 0, function* () {
-            const response = yield fetch('/api/contacts', {
+        const fetchTasks = () => __awaiter(void 0, void 0, void 0, function* () {
+            const response = yield fetch('/api/tasks', {
                 headers: {
                     'Authorization': `Bearer ${user.token}`
                 }
             });
             const json = yield response.json();
             if (response.ok) {
-                dispatch({ type: 'SET_CONTACTS', payload: json });
+                dispatch({ type: 'SET_TASKS', payload: json });
             }
         });
         if (user) {
-            fetchContacts();
+            fetchTasks();
         }
-        fetchContacts();
+        fetchTasks();
     }, [dispatch, user]);
     return (react_3.default.createElement(react_2.Box, { className: "home", pt: "8%", ml: "5%" },
         react_3.default.createElement(react_2.Box, null,
-            react_3.default.createElement(ContactForm_1.default, null)),
-        react_3.default.createElement(react_2.Box, { className: "contacts" }, contacts && contacts.map((contact) => (react_3.default.createElement(ContactList_1.default, { key: contact._id, contact: contact }))))));
+            react_3.default.createElement(TaskForm_1.default, null)),
+        react_3.default.createElement(react_2.Box, { className: "tasks" }, tasks && tasks.map((task) => (react_3.default.createElement(TaskList_1.default, { key: task._id, task: task }))))));
 };
 exports.default = Home;

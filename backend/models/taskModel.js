@@ -16,7 +16,7 @@ const taskSchema = new Schema(
             type: String,
             required: false
         },
-        task_id: {
+        user_id: {
             type: String,
             required: true
         }

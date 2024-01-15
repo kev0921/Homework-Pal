@@ -1,20 +1,20 @@
 import { useEffect } from 'react'
 import {Box, VStack, Heading, Flex} from "@chakra-ui/react"
-import { useContactsContext } from '../hooks/useContactsContext'
+import { useTasksContext } from '../hooks/useTasksContext'
 import { useAuthContext } from '../hooks/useAuthContext'
 import React from 'react'
 
 // components
-import ContactList from '../components/ContactList'
-import ContactForm from '../components/ContactForm'
+import TaskList from '../components/TaskList'
+import TaskForm from '../components/TaskForm'
 
 const Home = () => {
-    const {contacts, dispatch} = useContactsContext()
+    const {tasks, dispatch} = useTasksContext()
     const {user} = useAuthContext()
 
     useEffect(() => {
-        const fetchContacts = async () => {
-            const response = await fetch('/api/contacts', {
+        const fetchTasks = async () => {
+            const response = await fetch('/api/tasks', {
                 headers: {
                     'Authorization': `Bearer ${user.token}`
                 }
@@ -22,15 +22,15 @@ const Home = () => {
             const json = await response.json()
 
             if (response.ok){
-                dispatch({type: 'SET_CONTACTS', payload: json})
+                dispatch({type: 'SET_TASKS', payload: json})
             }
         }
 
         if (user) {
-            fetchContacts()
+            fetchTasks()
         }
 
-        fetchContacts()
+        fetchTasks()
     }, [dispatch, user])
  
     return (
@@ -38,12 +38,12 @@ const Home = () => {
         <Box className="home" pt="8%" ml="5%">
 
             <Box>
-                <ContactForm/>
+                <TaskForm/>
             </Box>
 
-            <Box className="contacts">
-                {contacts && contacts.map((contact) => (
-                    <ContactList key={contact._id} contact={contact}/>
+            <Box className="tasks">
+                {tasks && tasks.map((task) => (
+                    <TaskList key={task._id} task={task}/>
                 ))}
             </Box>
             

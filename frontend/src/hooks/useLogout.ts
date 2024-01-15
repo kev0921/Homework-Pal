@@ -1,9 +1,9 @@
 import { useAuthContext } from "./useAuthContext"
-import { useContactsContext } from "./useContactsContext"
+import { useTasksContext } from "./useTasksContext"
 
 export const useLogout = () => {
     const { dispatch } = useAuthContext();
-    const { dispatch: contactsDispatch } = useContactsContext();
+    const { dispatch: tasksDispatch } = useTasksContext();
 
     const logout = () => {
         // Update global state
@@ -12,7 +12,7 @@ export const useLogout = () => {
 
         // Dispatch logout action
         dispatch({ type: 'LOGOUT', payload: undefined });
-        contactsDispatch({ type: 'SET_CONTACTS', payload: [] });
+        tasksDispatch({ type: 'SET_TASKS', payload: [] });
     }
 
     return { logout };

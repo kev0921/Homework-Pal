@@ -1,22 +1,22 @@
 import { useState } from "react";
-import { useContactsContext } from "../hooks/useContactsContext";
+import { useTasksContext } from "../hooks/useTasksContext";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { FormControl, FormLabel, FormErrorMessage, FormHelperText, Box, Input, Button, VStack, SimpleGrid, Card, CardHeader, CardBody, CardFooter, Text, Flex, Image, HStack, Heading } from "@chakra-ui/react";
 import React from "react";
 
-const ContactForm = () => {
-  const { dispatch } = useContactsContext();
+const TaskForm = () => {
+  const { dispatch } = useTasksContext();
   const { user } = useAuthContext();
 
   const [name, setName] = useState("");
-  const [number, setNumber] = useState("");
-  const [email, setEmail] = useState("");
+  const [subject, setSubject] = useState("");
+  const [description, setDescription] = useState("");
   const [error, setError] = useState<string>('');
   const [emptyFields, setEmptyFields] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
 
   const isError1 = name === "" && formSubmitted;
-  const isError2 = number === "" && formSubmitted;
+  const isError2 = subject === "" && formSubmitted;
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
@@ -27,11 +27,11 @@ const ContactForm = () => {
       return
     }
 
-    const contact = { name, number, email };
+    const task = { name, subject, description };
 
-    const response = await fetch("/api/contacts", {
+    const response = await fetch("/api/tasks", {
       method: "POST",
-      body: JSON.stringify(contact),
+      body: JSON.stringify(task),
       headers: {
         "Content-Type": "application/json",
         'Authorization': `Bearer ${user.token}`
@@ -47,49 +47,49 @@ const ContactForm = () => {
 
     if (response.ok) {
       setName("");
-      setNumber("");
-      setEmail("");
+      setSubject("");
+      setDescription("");
       setError('');
       setEmptyFields([]);
       setFormSubmitted(false);
-      console.log("new contact added", json);
-      dispatch({ type: "CREATE_CONTACT", payload: json });
+      console.log("new task added", json);
+      dispatch({ type: "CREATE_TASK", payload: json });
     }
   };
 
   return (
     <Box>
       <form className="create" onSubmit={handleSubmit}>
-        <Heading>Add a new contact</Heading>
+        <Heading>Add a new task</Heading>
 
         <FormControl id="name" isInvalid={isError1}>
-          <FormLabel>Contact Name</FormLabel>
+          <FormLabel>Task Name</FormLabel>
           <Input type="text" value={name} onChange={(e) => setName(e.target.value)} />
 
           {!isError1 ? (
-            <FormHelperText>Enter the contact's full name</FormHelperText>
+            <FormHelperText>Enter the name of the task</FormHelperText>
           ) : (
             <FormErrorMessage>Name is required.</FormErrorMessage>
           )}
         </FormControl>
 
-        <FormControl id="number" isInvalid={isError2}>
-          <FormLabel>Contact Number</FormLabel>
-          <Input type="text" value={number} onChange={(e) => setNumber(e.target.value)} />
+        <FormControl id="subject" isInvalid={isError2}>
+          <FormLabel>School Subject</FormLabel>
+          <Input type="text" value={subject} onChange={(e) => setSubject(e.target.value)} />
 
           {!isError2 ? (
-            <FormHelperText>Enter the contact's phone number</FormHelperText>
+            <FormHelperText>Enter the school subject related to the task</FormHelperText>
           ) : (
-            <FormErrorMessage>Number is required.</FormErrorMessage>
+            <FormErrorMessage>Subject is required.</FormErrorMessage>
           )}
         </FormControl>
 
-        <FormControl id="email">
-          <FormLabel>Contact Email</FormLabel>
-          <Input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <FormControl id="description">
+          <FormLabel>Description</FormLabel>
+          <Input type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
         </FormControl>
 
-        <Button type="submit">Add Contact</Button>
+        <Button type="submit">Add Task</Button>
 
         {error && <Box className="error">{error}</Box>}
       </form>
@@ -97,4 +97,4 @@ const ContactForm = () => {
   );
 };
 
-export default ContactForm;
+export default TaskForm;

@@ -53,12 +53,6 @@ export default function Navbar() {
       {/* Mobile Navbar */}
       {!isLargerThan768 && (
         <Flex alignItems="center" width="100%">
-          <Heading ml="-20px">
-            <Box fontSize="33px" color={colorMode === "dark" ? "blue.500" : "blue.500"} transition="color 0.3s ease, font-weight 0.3s" 
-              _hover={{ color: colorMode === "dark" ? "white" : "black"}}>
-              <a href="/">Kevin Hu</a>
-            </Box>
-          </Heading>
 
             <Button variant="ghost" onClick={toggleColorMode} mr="3%" transition="background-color 0.3s ease" _hover={{ bg: colorMode === 'dark' ? 'gray.800' : 'gray.200' }}>
               {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
@@ -94,24 +88,12 @@ export default function Navbar() {
       {/* Laptop Navbar */}
       {isLargerThan768 && (
         <>
-          <Heading as="h1" ml="20px">
-            <Box mx={8} fontSize="33px" color={colorMode === "dark" ? "blue.500" : "blue.500"} transition="color 0.3s ease, font-weight 0.3s" 
-              _hover={{ color: colorMode === "dark" ? "white" : "black"}}>
-              <a href="/">Kevin Hu</a>
-            </Box>
-          </Heading>
-
           <Spacer />
 
           <Flex align="center">
             <Box mx={8} fontSize="20px" color={getLinkColor("/")} transition="color 0.3s ease, font-weight 0.3s" 
               _hover={{ color: colorMode === "dark" ? "white" : "black", fontWeight: "bold"}} fontWeight={isActiveLink("/") ? "bold" : "normal"}>
-              <a href="/">Contacts</a>
-            </Box>
-
-            <Box mx={8} fontSize="20px" color={getLinkColor("/About")} transition="color 0.3s ease, font-weight 0.3s" 
-              _hover={{ color: colorMode === "dark" ? "white" : "black", fontWeight: "bold"}} fontWeight={isActiveLink("/About") ? "bold" : "normal"}>
-              <a href="/About">Add</a>
+              <a href="/">Home</a>
             </Box>
 
             { user && (

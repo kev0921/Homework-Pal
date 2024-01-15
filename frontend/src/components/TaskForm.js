@@ -13,21 +13,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = require("react");
-const useContactsContext_1 = require("../hooks/useContactsContext");
+const useTasksContext_1 = require("../hooks/useTasksContext");
 const useAuthContext_1 = require("../hooks/useAuthContext");
 const react_2 = require("@chakra-ui/react");
 const react_3 = __importDefault(require("react"));
-const ContactForm = () => {
-    const { dispatch } = (0, useContactsContext_1.useContactsContext)();
+const TaskForm = () => {
+    const { dispatch } = (0, useTasksContext_1.useTasksContext)();
     const { user } = (0, useAuthContext_1.useAuthContext)();
     const [name, setName] = (0, react_1.useState)("");
-    const [number, setNumber] = (0, react_1.useState)("");
-    const [email, setEmail] = (0, react_1.useState)("");
+    const [subject, setSubject] = (0, react_1.useState)("");
+    const [description, setDescription] = (0, react_1.useState)("");
     const [error, setError] = (0, react_1.useState)('');
     const [emptyFields, setEmptyFields] = (0, react_1.useState)([]);
     const [formSubmitted, setFormSubmitted] = (0, react_1.useState)(false);
     const isError1 = name === "" && formSubmitted;
-    const isError2 = number === "" && formSubmitted;
+    const isError2 = subject === "" && formSubmitted;
     const handleSubmit = (e) => __awaiter(void 0, void 0, void 0, function* () {
         e.preventDefault();
         setFormSubmitted(true);
@@ -35,10 +35,10 @@ const ContactForm = () => {
             setError('You must be logged in');
             return;
         }
-        const contact = { name, number, email };
-        const response = yield fetch("/api/contacts", {
+        const task = { name, subject, description };
+        const response = yield fetch("/api/tasks", {
             method: "POST",
-            body: JSON.stringify(contact),
+            body: JSON.stringify(task),
             headers: {
                 "Content-Type": "application/json",
                 'Authorization': `Bearer ${user.token}`
@@ -51,30 +51,30 @@ const ContactForm = () => {
         }
         if (response.ok) {
             setName("");
-            setNumber("");
-            setEmail("");
+            setSubject("");
+            setDescription("");
             setError('');
             setEmptyFields([]);
             setFormSubmitted(false);
-            console.log("new contact added", json);
-            dispatch({ type: "CREATE_CONTACT", payload: json });
+            console.log("new task added", json);
+            dispatch({ type: "CREATE_TASK", payload: json });
         }
     });
     return (react_3.default.createElement(react_2.Box, null,
         react_3.default.createElement("form", { className: "create", onSubmit: handleSubmit },
-            react_3.default.createElement(react_2.Heading, null, "Add a new contact"),
+            react_3.default.createElement(react_2.Heading, null, "Add a new task"),
             react_3.default.createElement(react_2.FormControl, { id: "name", isInvalid: isError1 },
-                react_3.default.createElement(react_2.FormLabel, null, "Contact Name"),
+                react_3.default.createElement(react_2.FormLabel, null, "Task Name"),
                 react_3.default.createElement(react_2.Input, { type: "text", value: name, onChange: (e) => setName(e.target.value) }),
-                !isError1 ? (react_3.default.createElement(react_2.FormHelperText, null, "Enter the contact's full name")) : (react_3.default.createElement(react_2.FormErrorMessage, null, "Name is required."))),
-            react_3.default.createElement(react_2.FormControl, { id: "number", isInvalid: isError2 },
-                react_3.default.createElement(react_2.FormLabel, null, "Contact Number"),
-                react_3.default.createElement(react_2.Input, { type: "text", value: number, onChange: (e) => setNumber(e.target.value) }),
-                !isError2 ? (react_3.default.createElement(react_2.FormHelperText, null, "Enter the contact's phone number")) : (react_3.default.createElement(react_2.FormErrorMessage, null, "Number is required."))),
-            react_3.default.createElement(react_2.FormControl, { id: "email" },
-                react_3.default.createElement(react_2.FormLabel, null, "Contact Email"),
-                react_3.default.createElement(react_2.Input, { type: "text", value: email, onChange: (e) => setEmail(e.target.value) })),
-            react_3.default.createElement(react_2.Button, { type: "submit" }, "Add Contact"),
+                !isError1 ? (react_3.default.createElement(react_2.FormHelperText, null, "Enter the name of the task")) : (react_3.default.createElement(react_2.FormErrorMessage, null, "Name is required."))),
+            react_3.default.createElement(react_2.FormControl, { id: "subject", isInvalid: isError2 },
+                react_3.default.createElement(react_2.FormLabel, null, "School Subject"),
+                react_3.default.createElement(react_2.Input, { type: "text", value: subject, onChange: (e) => setSubject(e.target.value) }),
+                !isError2 ? (react_3.default.createElement(react_2.FormHelperText, null, "Enter the school subject related to the task")) : (react_3.default.createElement(react_2.FormErrorMessage, null, "Subject is required."))),
+            react_3.default.createElement(react_2.FormControl, { id: "description" },
+                react_3.default.createElement(react_2.FormLabel, null, "Description"),
+                react_3.default.createElement(react_2.Input, { type: "text", value: description, onChange: (e) => setDescription(e.target.value) })),
+            react_3.default.createElement(react_2.Button, { type: "submit" }, "Add Task"),
             error && react_3.default.createElement(react_2.Box, { className: "error" }, error))));
 };
-exports.default = ContactForm;
+exports.default = TaskForm;
